@@ -1,41 +1,36 @@
 package lab;
 import java.net.*;
 import java.io.*;
-public class Authenticator_swosti {
-	
-	    public static void main(String[] args) {
-	        try {
-	            // Set the default Authenticator
-	            Authenticator.setDefault(new Authenticator() {
-	                @Override
-	                protected PasswordAuthentication getPasswordAuthentication() {
-	                    System.out.println("Requesting authentication for: " + getRequestingHost());
-	                    // Return username and password
-	                    return new PasswordAuthentication("username", "password".toCharArray());
-	                }
-	            });
+public class Authenticator_swosti extends Authenticator  {
+	    	 @Override
+	    	    protected PasswordAuthentication getPasswordAuthentication() {
+	    	        // Prompt the user for a username and password
+	    	        String username = "03268048";
+	    	        String password = "wefef";
+	    	        // Return the authentication credentials
+	    	        return new PasswordAuthentication(username, password.toCharArray());
+	    	    }
 
-	            // URL that requires authentication (example)
-	            URL url = new URL("http://facebook.com/protected");
-	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	    	    public static void main(String[] args) {
+	    	        // Set the default authenticator to your custom authenticator
+	    	        Authenticator.setDefault(new Authenticator_swosti());
 
-	            // Get response code
-	            int responseCode = connection.getResponseCode();
-	            System.out.println("Response Code: " + responseCode);
+	    	        try {
+	    	            // Create a URL object
+	    	            URL url = new URL("https://web.facebook.com/#/login");
 
-	            // Read and print content if response is OK
-	            if (responseCode == HttpURLConnection.HTTP_OK) {
-	                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	                String inputLine;
-	                while ((inputLine = in.readLine()) != null) {
-	                    System.out.println(inputLine);
-	                }
-	                in.close();
-	            }
+	    	            // Open a connection to the URL
+	    	            URLConnection connection = url.openConnection();
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
-	
+	    	            // Read the response from the server
+	    	            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    	            String line;
+	    	            while ((line = reader.readLine()) != null) {
+	    	                System.out.println(line);
+	    	            }
+	    	            reader.close();
+	    	        } catch (IOException e) {
+	    	            System.err.println("Error: " + e.getMessage());
+	    	        }
+	    	    }
 }
